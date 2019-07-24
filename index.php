@@ -1,29 +1,29 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "import_csv");
+$conn = mysqli_connect("localhost", "root", "", "upload_csv");
 
 if (isset($_POST["import"])) {
     
     $fileName = $_FILES["file"]["tmp_name"];
     
-    if ($_FILES["file"]["size"] > 0) {
+    if ($_FILES["file"]["size"] >= 1) {
         
         $file = fopen($fileName, "r");
         
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
-           
-            $sqlInsertf = "SELECT * FROM users WHERE userName='$column[1]'";
+           // print_r($column);die;
+            // $sqlInsertf = "SELECT * FROM customers WHERE code='$column[1]'";
             
-            $result1 = mysqli_query($conn, $sqlInsertf);
-            $num_rows = mysqli_num_rows($result1);
-            if ($num_rows) {
-              $type = "error";
-                $message = "Problem in Importing CSV Data";
-            }else {
-                $sqlInsert = "INSERT into users (userId,userName,password,firstName,lastName)
-                   values ('" . $column[0] . "','" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "')";
+            // $result1 = mysqli_query($conn, $sqlInsertf);
+            // $num_rows = mysqli_num_rows($result1);
+            //if ($num_rows) {
+              // $type = "error";
+              //   $message = "Problem in Importing CSV Data";
+            //}else {
+                $sqlInsert = "INSERT into customers (code,name,created_at,pricing_type,price_local,currency_local,status,failure_reason,cryptocurrency,price_cryptocurrency,transaction_hash,transaction_amount_primary,transaction_hashes_additional,transaction_amounts_additional)
+                   values ('" . $column[0] . "','" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "','" . $column[5] . "','" . $column[6] . "','" . $column[7] . "','" . $column[8] . "','" . $column[9] . "','" . $column[10] . "','" . $column[11] . "','" . $column[12] . "','" . $column[13] . "')";
             
                 $result = mysqli_query($conn, $sqlInsert);
-                
+                // print_r($result);die('*-*-*-');
                 if (! empty($result)) {
                     $type = "success";
                     $message = "CSV Data Imported into the Database";
@@ -31,7 +31,7 @@ if (isset($_POST["import"])) {
                     $type = "error";
                     $message = "Problem in Importing CSV Data";
                 }
-            }
+            //}
 
             
         }
@@ -153,7 +153,7 @@ $(document).ready(function() {
 
         </div>
                <?php
-            $sqlSelect = "SELECT * FROM users";
+            $sqlSelect = "SELECT * FROM customers";
             $result = mysqli_query($conn, $sqlSelect);
             
             if (mysqli_num_rows($result) > 0) {
@@ -175,10 +175,10 @@ $(document).ready(function() {
                     
                 <tbody>
                 <tr>
-                    <td><?php  echo $row['userId']; ?></td>
-                    <td><?php  echo $row['userName']; ?></td>
-                    <td><?php  echo $row['firstName']; ?></td>
-                    <td><?php  echo $row['lastName']; ?></td>
+                    <td><?php  //echo $row['userId']; ?></td>
+                    <td><?php  //echo $row['userName']; ?></td>
+                    <td><?php  //echo $row['firstName']; ?></td>
+                    <td><?php  //echo $row['lastName']; ?></td>
                 </tr>
                     <?php
                 }
